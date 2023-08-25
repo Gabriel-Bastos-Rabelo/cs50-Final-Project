@@ -1,4 +1,3 @@
-
 ### Introduction
 I am currently working on an exciting project as part of the final coursework for Harvard's CS50 course. The project revolves around creating a collaborative photo album platform using a combination of Python, Flask, Bootstrap, and SQLite. The primary objective is to develop a user-friendly web application that allows friends to create shared photo albums within designated groups, enhancing their ability to collectively share and relive memories.
 
