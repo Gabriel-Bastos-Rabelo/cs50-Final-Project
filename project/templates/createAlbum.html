@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create Album
+{% endblock %}
+
+{% block main %}
+<h3>Create Album</h3>
+<form action="/createAlbum" method="post">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Album Name" type="text">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password Album" type="password">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Password Album (again)" type="password">
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+</form>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Snapbook
+{% endblock %}
+
+{% block main %}
+
+
+        <h1>Aqui eh onde ira fiar os albuns nos quais o usuario faz parte</h1>
+        <div class = "album py-5 bg-body-tertiary">
+            <div class = "container">
+            <div class = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for album in albumsUser %}
+
+            <div class = "col">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="..." class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <h5 class="card-title">{{album['name']}}</h5>
+                    <h5>Adm: {{album['administrador']}}</h5>
+                    <h5>Participantes:</h5>
+
+                    <ul class="list-group">
+
+
+
+                    {% for participante in album["participantes"]  %}
+
+
+                        <li class="list-group-item">{{participante['name']}}</li>
+
+
+
+
+                    {% endfor %}
+
+                    </ul>
+
+                    <button type="button" class="btn btn-primary mt-3">View</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

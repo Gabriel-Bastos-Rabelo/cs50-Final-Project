@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <form action="/acessAlbum" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Name of the Album" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+
+    <div class = "album py-5 bg-body-tertiary">
+        <div class = "container">
+        <div class = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for album in albumsUser %}
+
+        <div style="display: none;" class = "col {{album['name']}} card">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+            <div class="col-md-4">
+                <img src="..." class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                <h5 class="card-title">{{album['name']}}</h5>
+                <h5>Adm: {{album['administrador']}}</h5>
+                <h5>Participanes:</h5>
+
+                <ul class="list-group">
+
+
+
+                {% for participante in album["participantes"]  %}
+
+
+                    <li class="list-group-item">{{participante['name']}}</li>
+
+
+
+
+                {% endfor %}
+
+                </ul>
+
+                <button type="button" class="btn btn-primary mt-3">View</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+</div>
+
+
+    <script>
+        // ... o resto do seu JavaScript ...
+
+        const searchInput = document.getElementById('name');
+
+        searchInput.addEventListener('input', function() {
+            const searchText = searchInput.value;
+            console.log(searchText)
+            getSuggestions(searchText);
+        });
+
+
+        function getSuggestions(searchText) {
+            $.ajax({
+                url: '/suggestions?q=' + searchText,
+                method: 'GET',
+                success: function(data) {
+                    displaySuggestions(data);
+                }
+            });
+        }
+
+
+        function displaySuggestions(suggestions) {
+    elementos = document.getElementsByClassName(suggestions[0]);
+
+    if (elementos.length > 0) {
+        elementos[0].style.display = 'block';
+    }
+
+}
+
+
+
+
+    </script>
+
+{% endblock %}
