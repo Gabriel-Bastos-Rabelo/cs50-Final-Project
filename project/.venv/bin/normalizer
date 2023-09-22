@@ -1,4 +1,6 @@
-#!/workspaces/114198251/project/.venv/bin/python
+#!/bin/sh
+'''exec' "/home/GabrielBastos/Área de trabalho/cs50_finalProject/project/.venv/bin/python3" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

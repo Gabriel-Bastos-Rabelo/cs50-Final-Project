@@ -7,7 +7,7 @@
 {% block main %}
 
 
-        <h1>Aqui eh onde ira fiar os albuns nos quais o usuario faz parte</h1>
+        <h1>Aqui eh onde ira ficar os albuns nos quais o usuario faz parte</h1>
         <div class = "album py-5 bg-body-tertiary">
             <div class = "container">
             <div class = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -40,8 +40,10 @@
                     {% endfor %}
 
                     </ul>
-
-                    <button type="button" class="btn btn-primary mt-3">View</button>
+                    <form action="/renderAlbum" method="post">
+                        <input type="hidden" name="cardName" id="cardNameField" value="{{album['name']}}">
+                        <button class="btn btn-primary mt-3" type = "submit">View</button>
+                    </form>
                     </div>
                 </div>
                 </div>

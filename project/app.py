@@ -8,7 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import datetime
 
 
-from helpers import login_required
+from helpers import login_required, apology
 
 # Configure application
 app = Flask(__name__)
@@ -150,12 +150,14 @@ def createAlbum():
 
         if password != confirmation:
             print("the passwords do not match")
+            # aqui eu tenho que renderizar uma tela ou um pop-up falando que as senhas nao batem
             return 0
 
         albums = db.execute('SELECT name FROM album WHERE name = ?', name)
 
         if len(albums) != 0:
             print("the album name already exist")
+            # aqui eu tenho que renderizar uma tela falando que o nome do album ja existe
             return 0
 
         db.execute("INSERT INTO album (name, adm, hash) VALUES(?, ?, ?)", name, session["user_id"], generate_password_hash(password))
@@ -177,34 +179,74 @@ def createAlbum():
 @login_required
 def acessAlbum():
     if request.method == "GET":
-        albums = db.execute("SELECT * FROM AlbumUsers WHERE user_id = ?", session["user_id"])
-        albumsUser = []
-        administradores = []
-        for index, album in enumerate(albums):
-            albumDb = db.execute("SELECT * FROM album WHERE id = ?", album["album_id"])
-            participantes = db.execute("SELECT users.name FROM users INNER JOIN AlbumUsers ON AlbumUsers.user_id = users.id WHERE AlbumUsers.album_id = ?", album["album_id"])
+        # albums = db.execute("SELECT * FROM AlbumUsers WHERE user_id = ?", session["user_id"])
+        # albumsUser = []
+        # administradores = []
+        # for index, album in enumerate(albums):
+        #     albumDb = db.execute("SELECT * FROM album WHERE id = ?", album["album_id"])
+        #     participantes = db.execute("SELECT users.name FROM users INNER JOIN AlbumUsers ON AlbumUsers.user_id = users.id WHERE AlbumUsers.album_id = ?", album["album_id"])
 
 
-            administrador = db.execute("SELECT name FROM users WHERE id = ?", albumDb[0]['adm'])
-            albumsUser.append({'name': albumDb[0]['name'], 'administrador' : administrador[0]['name'], 'participantes': participantes})
+        #     administrador = db.execute("SELECT name FROM users WHERE id = ?", albumDb[0]['adm'])
+        #     albumsUser.append({'name': albumDb[0]['name'], 'administrador' : administrador[0]['name'], 'participantes': participantes})
 
 
-        return render_template("accessAlbum.html", albumsUser = albumsUser)
+        return render_template("accessAlbum.html")
+    elif request.method == "POST":
+        albumsSearch = []
+        name = request.form.get("name")
+        albums = db.execute("SELECT * FROM album WHERE name LIKE ?", ('%' + name + '%',))
+        for album in albums:
+            adm = db.execute("SELECT name FROM users WHERE id = ?", album['adm'])
+            albumsSearch.append({'name': album['name'], 'adm': adm[0]['name']})
+
+        
+
+
+        return render_template("accessAlbum.html", albumsUser = albumsSearch)
 
 
 
-# suggestion_list = [
-#     'Maçã', 'Banana', 'Laranja', 'Uva', 'Pêra',
-#     'Abacaxi', 'Manga', 'Melancia', 'Melão', 'Morango'
-# ]
+@app.route("/unlockAlbum", methods=["GET", "POST"])
+@login_required
+
+def unlockAlbum():
+    if request.method == "POST":
+        name = request.form.get("cardName")
+        password = request.form.get("senha")
+        album = db.execute("SELECT * FROM album WHERE name = ?", (name))
+        if check_password_hash(album[0]["hash"], password) == True:
+            id_album = album[0]['id']
+            participa = db.execute("SELECT * FROM AlbumUsers WHERE album_id = ? AND user_id = ?", id_album, session["user_id"])
+            if(len(participa) > 0):
+                return apology("You already is a member of this album")
+            else:
+                db.execute("INSERT INTO AlbumUsers (album_id, user_id) VALUES (?, ?)", id_album, session["user_id"])
+                return render_template("accessAlbum.html")
+
+        else:
+            print('chegou aqui')
+            return apology("The password is incorrect")
+
+
+@app.route("/renderAlbum", methods=["GET", "POST"])
+@login_required
+
+def renderAlbum():
+    if request.method == "POST":
+        print("chegou aqui em renderAlbum")
+        name = request.form.get("cardName")
+
+        return render_template("album.html", albumName = name)
+
+@app.route("/uploadImage", methods = ["GET"])
+@login_required
+
+def uploadImage():
+    if request.method == "POST":
+        print("chegou aqui em upload images")
 
 
 
-@app.route('/suggestions', methods=['GET'])
-def get_suggestions():
-    search_text = request.args.get('q', '').lower()
-    suggestion_list = db.execute("SELECT name FROM album")
-    print(suggestion_list[0]['name'])
-    matching_suggestions = [suggestion['name'] for suggestion in suggestion_list if suggestion['name'].lower().startswith(search_text)]
-    print(matching_suggestions)
-    return jsonify(matching_suggestions)
+
+

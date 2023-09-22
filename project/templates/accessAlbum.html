@@ -7,19 +7,20 @@
 {% block main %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <form action="/acessAlbum" method="post">
+    <form action="/accessAlbum" method="post">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Name of the Album" type="text">
         </div>
         <button class="btn btn-primary" type="submit">Search</button>
     </form>
 
+
     <div class = "album py-5 bg-body-tertiary">
         <div class = "container">
         <div class = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {% for album in albumsUser %}
 
-        <div style="display: none;" class = "col {{album['name']}} card">
+        <div class = "col {{album['name']}} card">
         <div class="card mb-3" style="max-width: 540px;">
             <div class="row g-0">
             <div class="col-md-4">
@@ -28,31 +29,15 @@
             <div class="col-md-8">
                 <div class="card-body">
                 <h5 class="card-title">{{album['name']}}</h5>
-                <h5>Adm: {{album['administrador']}}</h5>
-                <h5>Participanes:</h5>
+                <h5>Adm: {{album['adm']}}</h5>
 
-                <ul class="list-group">
-
-
-
-                {% for participante in album["participantes"]  %}
-
-
-                    <li class="list-group-item">{{participante['name']}}</li>
-
-
-
-
-                {% endfor %}
-
-                </ul>
-
-                <button type="button" class="btn btn-primary mt-3">View</button>
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-card-name="{{album['name']}}">View</button>
                 </div>
             </div>
             </div>
         </div>
         </div>
+
 
         {% endfor %}
 
@@ -60,42 +45,47 @@
 </div>
 </div>
 
+<!--MODAL-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="cardNamePlaceholder"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/unlockAlbum" method="post">
+                <div class="mb-3">
+                    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="senha" name="senha" placeholder="Password of the album" type="text">
+                </div>
+                <input type="hidden" name="cardName" id="cardNameField" value="">
+                <button class="btn btn-primary" type="submit">Join</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // ... o resto do seu JavaScript ...
+  <script>
+    const viewButtons = document.querySelectorAll('[data-bs-target="#exampleModal"]');
+    viewButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            // Obtenha o nome do card do atributo data-card-name
+            const cardName = button.getAttribute('data-card-name');
 
-        const searchInput = document.getElementById('name');
+            // Atualize o conteúdo do modal com o nome do card
+            const cardNamePlaceholder = document.getElementById('cardNamePlaceholder');
+            const cardNameField = document.getElementById('cardNameField')
+            cardNamePlaceholder.textContent = cardName;
+            cardNameField.value = cardName;
 
-        searchInput.addEventListener('input', function() {
-            const searchText = searchInput.value;
-            console.log(searchText)
-            getSuggestions(searchText);
         });
+    });
+</script>
 
 
-        function getSuggestions(searchText) {
-            $.ajax({
-                url: '/suggestions?q=' + searchText,
-                method: 'GET',
-                success: function(data) {
-                    displaySuggestions(data);
-                }
-            });
-        }
-
-
-        function displaySuggestions(suggestions) {
-    elementos = document.getElementsByClassName(suggestions[0]);
-
-    if (elementos.length > 0) {
-        elementos[0].style.display = 'block';
-    }
-
-}
-
-
-
-
-    </script>
 
 {% endblock %}
