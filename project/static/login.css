@@ -1,0 +1,77 @@
+nav .navbar-brand
+{
+    font-size: xx-large;
+}
+
+/* Colors for brand */
+nav .navbar-brand .blue
+{
+    color: #537fbe;
+}
+nav .navbar-brand .red
+{
+    color: #ea433b;
+}
+nav .navbar-brand .yellow
+{
+    color: #f5b82e;
+}
+nav .navbar-brand .green
+{
+    color: #2e944b;
+}
+
+
+/* Estilo para o formulário de login */
+.custom-login-form {
+    background-color: #f7f7f7; /* Cor de fundo */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Largura do formulário */
+    margin: 0 auto; /* Centralizar horizontalmente */
+}
+
+.custom-login-form input[type="text"],
+.custom-login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.custom-login-form input[type="text"]:focus,
+.custom-login-form input[type="password"]:focus {
+    border-color: #007bff; /* Cor da borda ao focar */
+    outline: none;
+}
+
+.custom-login-form .btn-primary {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Cor de fundo do botão */
+    border: none;
+    border-radius: 5px;
+    color: #fff; /* Cor do texto do botão */
+    font-size: 16px;
+}
+
+.custom-login-form .btn-primary:hover {
+    background-color: #0056b3; /* Cor de fundo do botão ao passar o mouse */
+}
+
+/* Estilo para o título */
+h1 {
+    text-align: center;
+    color: #333; /* Cor do título */
+    margin-bottom: 20px;
+}
+
+/* Estilo para o texto de erro (se aplicável) */
+.error-message {
+    color: #ff0000;
+    text-align: center;
+    margin-top: 10px;
+}

@@ -1,18 +1,95 @@
 {% extends "layout.html" %}
 
+{% block css %}
+    <link href="/static/album.css" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
     Album
 {% endblock %}
 
 {% block main %}
     <h1>{{albumName}}</h1>
-    <form action="/uploadImage" method="post">
+    <form class = "py-5" action="/uploadImage" method="post">
+        <h2>Upload an Image</h2>
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="description" name="description" placeholder="Description" type="text">
+            <textarea autocomplete="off" autofocus class="form-control mx-auto w-auto" id="description" name="description" placeholder="Description"></textarea>
+            <input type="hidden" name="albumName" id="albumName" value= "{{albumName}}">
         </div>
         <div class="mb-3">
             <input class="form-control mx-auto w-auto" id="url_image" name="url_image" placeholder="Images's Url" type="text">
         </div>
         <button class="btn btn-primary" type="submit">Upload</button>
     </form>
-{% endblock %}
+
+
+
+    <div class = "album py-5 bg-body-tertiary">
+        <div class = "container">
+        <div class = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for image in images %}
+
+        <div class = "col">
+        <div class="card" style="max-width: 540px;">
+            <img src="{{image['url']}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <p class="card-text">{{image['description']}}</p>
+              <p class = "card-text">Author: {{image['authorName']}}</p>
+              <p class = "card-text">Post Date: {{image['post_date']}}</p>
+            </div>
+            {% if statusAdm %}
+            <div>
+                <form action = "/deleteImage" method = "post">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#image_id{{image['id']}}">
+                        Update
+                    </button>
+
+                    <input type="hidden" name="id" id="id" value= "{{image['id']}}">
+
+                    <button class="btn btn-primary" type="submit">Delete</button>
+
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+        </div>
+
+        <div class="modal fade" id="image_id{{image['id']}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Update an image</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class = "py-5" action="/updateImage" method="post">
+                        <div class="mb-3">
+                            <textarea autocomplete="off" autofocus class="form-control mx-auto w-auto" id="description" name="description" placeholder="Description">{{image['description']}}</textarea>
+                            <input type="hidden" name="albumName" id="albumName" value= "{{albumName}}">
+                            <input type="hidden" name="id" id="id" value= "{{image['id']}}">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-auto" id="url_image" name="url_image" placeholder="Images's Url" type="text" value="{{image['url']}}">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Upload</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+
+        {% endfor %}
+
+    </div>
+</div>
+</div>
+
+
+
+        {% endblock %}
+

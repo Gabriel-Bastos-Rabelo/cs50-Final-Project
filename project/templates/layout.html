@@ -14,7 +14,9 @@
         <!-- https://favicon.io/emoji-favicons/money-bag/ -->
         <!-- <link href="/static/favicon.ico" rel="icon"> -->
 
-        <link href="/static/styles.css" rel="stylesheet">
+        {% block css %}
+            <link href="/static/styles.css" rel="stylesheet">
+        {% endblock %}
 
         <title>SnapBook: {% block title %}{% endblock %}</title>
 

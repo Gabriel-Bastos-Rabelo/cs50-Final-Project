@@ -1,12 +1,17 @@
 {% extends "layout.html" %}
 
+{% block css %}
+    <link href="/static/search.css" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
-    Log In
+    Search
 {% endblock %}
 
 {% block main %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <h1>Search Album</h1>
     <form action="/accessAlbum" method="post">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Name of the Album" type="text">
@@ -20,24 +25,36 @@
         <div class = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {% for album in albumsUser %}
 
-        <div class = "col {{album['name']}} card">
+        <div class = "col">
         <div class="card mb-3" style="max-width: 540px;">
             <div class="row g-0">
             <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="...">
+                <img src="{{album['cover']}}" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                <h5 class="card-title">{{album['name']}}</h5>
-                <h5>Adm: {{album['adm']}}</h5>
+                    <h5 class="card-title">{{album['name']}}</h5>
+                    <h5>Adm: {{album['adm']}}</h5>
+                    {% if album['userInAlbum'] %}
+                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-card-name="{{album['name']}}">Join</button>
+                    {% endif %}
+                    {% if album['userInAlbum'] == False %}
+                    <form action = "/renderAlbum" method = "post">
 
-                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-card-name="{{album['name']}}">View</button>
+                        <input type="hidden" name="cardName" id="albumName" value= "{{album['name']}}">
+                        <button class="btn btn-primary" type="submit">View</button>
+
+                    </form>
+                {% endif %}
                 </div>
             </div>
             </div>
-        </div>
+
         </div>
 
+
+
+        </div>
 
         {% endfor %}
 
@@ -55,6 +72,7 @@
         </div>
         <div class="modal-body">
             <form action="/unlockAlbum" method="post">
+
                 <div class="mb-3">
                     <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="senha" name="senha" placeholder="Password of the album" type="text">
                 </div>

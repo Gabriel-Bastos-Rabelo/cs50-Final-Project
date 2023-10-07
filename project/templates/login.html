@@ -1,11 +1,15 @@
 {% extends "layout.html" %}
 
+{% block css %}
+    <link href="/static/login.css" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
     Log In
 {% endblock %}
 
 {% block main %}
-    <form action="/login" method="post">
+    <form action="/login" method="post" class = "custom-login-form">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
         </div>
